@@ -117,9 +117,9 @@ fun TerminalView() {
             }
         }) { Text("Run") }
         Spacer(Modifier.height(12.dp))
-        androidx.compose.foundation.lazy.LazyColumn(modifier = Modifier.fillMaxSize()) {
-            androidx.compose.foundation.lazy.items(output) { line ->
-                Text(line, style = MaterialTheme.typography.bodySmall)
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(output) { line: String ->
+                Text(text = line, style = MaterialTheme.typography.bodySmall)
             }
         }
     }
