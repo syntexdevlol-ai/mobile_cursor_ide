@@ -1,6 +1,6 @@
 <resources>
-    <!-- Use AppCompat DayNight; compose will override colors at runtime. -->
-    <style name="Theme.MobileCursorIDE" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <!-- Use Material Components DayNight; Compose will override colors at runtime. -->
+    <style name="Theme.MobileCursorIDE" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
     </style>

@@ -64,6 +64,10 @@ dependencies {
     // Networking for AI calls
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    // View-system themes for manifest
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+
     // Coroutine helpers
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
