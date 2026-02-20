@@ -68,6 +68,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
 
+    // Compose material icons
+    implementation("androidx.compose.material:material-icons-extended")
+
     // Coroutine helpers
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 

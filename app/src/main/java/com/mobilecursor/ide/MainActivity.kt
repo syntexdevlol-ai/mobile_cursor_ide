@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Terminal
@@ -114,7 +113,7 @@ fun TerminalView() {
             command = ""
             scope.launch(Dispatchers.IO) {
                 val result = runShell(cmd)
-                output = output + (listOf("">< $cmd") + result)
+                output = output + (listOf("> $cmd") + result)
             }
         }) { Text("Run") }
         Spacer(Modifier.height(12.dp))
