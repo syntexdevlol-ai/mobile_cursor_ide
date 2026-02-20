@@ -1,3 +1,7 @@
 <resources>
-    <style name="Theme.MobileCursorIDE" parent="Theme.Material3.Dark.NoActionBar" />
+    <!-- Fallback to Material3 Dark ActionBar because NoActionBar isn't in M3 base. -->
+    <style name="Theme.MobileCursorIDE" parent="Theme.Material3.Dark">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
 </resources>
