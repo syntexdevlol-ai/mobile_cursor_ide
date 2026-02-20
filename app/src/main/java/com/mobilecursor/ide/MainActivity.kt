@@ -3,6 +3,7 @@ package com.mobilecursor.ide
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
@@ -85,6 +86,10 @@ fun EditorView() {
             WebView(context).apply {
                 settings.javaScriptEnabled = true
                 settings.allowFileAccess = true
+                settings.allowFileAccessFromFileURLs = true
+                settings.allowUniversalAccessFromFileURLs = true
+                settings.domStorageEnabled = true
+                settings.cacheMode = WebSettings.LOAD_DEFAULT
                 webChromeClient = WebChromeClient()
                 webViewClient = WebViewClient()
                 loadUrl("file:///android_asset/monaco.html")
