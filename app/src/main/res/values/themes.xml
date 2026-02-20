@@ -1,6 +1,6 @@
 <resources>
-    <!-- Use Material3 DayNight; disable ActionBar/title manually. -->
-    <style name="Theme.MobileCursorIDE" parent="Theme.Material3.DayNight">
+    <!-- Use AppCompat DayNight; compose will override colors at runtime. -->
+    <style name="Theme.MobileCursorIDE" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
     </style>
