@@ -61,6 +61,9 @@ dependencies {
     // WebView bridge for Monaco/Xterm
     implementation("androidx.webkit:webkit:1.8.0")
 
+    // Networking for AI calls
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     // Coroutine helpers
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 

@@ -8,8 +8,6 @@ import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Code
@@ -22,8 +20,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("SetJavaScriptEnabled")
@@ -136,9 +136,34 @@ private fun runShell(cmd: String): List<String> {
 
 @Composable
 fun AiView() {
+    val client = remember {
+        OkHttpClient.Builder()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
     var prompt by remember { mutableStateOf(TextFieldValue()) }
-    var reply by remember { mutableStateOf("AI will reply here. Wire this to your backend.") }
+    var reply by remember { mutableStateOf("AI will reply here. Configure endpoint in code.") }
+    var loading by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val endpoint = remember { mutableStateOf("https://api.openai.com/v1/chat/completions") }
+    val apiKey = remember { mutableStateOf("") }
+
     Column(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+        OutlinedTextField(
+            value = endpoint.value,
+            onValueChange = { endpoint.value = it },
+            label = { Text("Endpoint") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            value = apiKey.value,
+            onValueChange = { apiKey.value = it },
+            label = { Text("API Key (bearer)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = prompt,
             onValueChange = { prompt = it },
@@ -146,9 +171,34 @@ fun AiView() {
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(Modifier.height(8.dp))
-        Button(onClick = {
-            reply = "(stub) You said: ${prompt.text}\nConnect this to your API and stream responses."
-        }) { Text("Send") }
+        Button(enabled = !loading, onClick = {
+            val body = """
+                {"model":"gpt-3.5-turbo","messages":[{"role":"user","content":"${prompt.text}"}]}
+            """.trimIndent()
+            loading = true
+            reply = ""
+            scope.launch(Dispatchers.IO) {
+                val req = Request.Builder()
+                    .url(endpoint.value)
+                    .addHeader("Authorization", "Bearer ${apiKey.value}")
+                    .addHeader("Content-Type", "application/json")
+                    .post(RequestBody.create("application/json".toMediaTypeOrNull(), body))
+                    .build()
+                try {
+                    client.newCall(req).execute().use { resp ->
+                        reply = if (resp.isSuccessful) {
+                            resp.body?.string() ?: "(empty response)"
+                        } else {
+                            "HTTP ${resp.code}: ${resp.body?.string()}"
+                        }
+                    }
+                } catch (e: Exception) {
+                    reply = "error: ${e.message}"
+                } finally {
+                    loading = false
+                }
+            }
+        }) { Text(if (loading) "Sending..." else "Send") }
         Spacer(Modifier.height(12.dp))
         Text(reply)
     }
